@@ -54,23 +54,12 @@ const expectedValues = computed(() => {
 </template>
 
 <style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
 .AssetAllocationCalculator {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  h1,
   h3 {
-    margin: auto;
+    margin: 0;
   }
   .AssetAllocationCalculator--Row {
     display: flex;
@@ -100,19 +89,31 @@ input[type="number"] {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      > * {
-        flex: 1 1 50%;
-      }
     }
   }
 }
 
 @media (max-width: 600px) {
-  .AssetAllocationCalculator--Row {
-    flex-direction: column;
-    .AssetAllocationCalculator--Right {
-      flex-direction: row;
+  .AssetAllocationCalculator {
+    .AssetAllocationCalculator--Row {
+      flex-direction: column;
+      .AssetAllocationCalculator--Right {
+        flex-direction: row;
+        > * {
+          flex: 1 1 50%;
+        }
+      }
     }
   }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 </style>
