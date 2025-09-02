@@ -97,6 +97,7 @@ const expectedValues = computed(() => {
             padding: 0.25rem 0.5rem 0.25rem 1.5rem;
             border-radius: 8px;
             flex: 1 0 auto;
+            max-width: 400px;
           }
         }
       }
