@@ -6,39 +6,18 @@ const { conversationRates } = defineProps<{
 }>();
 
 const usd = ref<number | null>(null);
-const btc = ref<number | null>(null);
-const eth = ref<number | null>(null);
 
-const getCoinValues = (usdValue: number | null) => {
-  if (!conversationRates || usdValue == null) return { btc: null, eth: null };
+const expectedValues = computed(() => {
+  if (!conversationRates || usd.value == null) return { btc: null, eth: null };
 
-  const seventy = usdValue * 0.7;
-  const thirty = usdValue * 0.3;
+  const seventy = usd.value * 0.7;
+  const thirty = usd.value * 0.3;
 
   return {
     btc: seventy * parseFloat(conversationRates.BTC),
     eth: thirty * parseFloat(conversationRates.ETH),
   };
-};
-
-const expectedValues = computed(() => getCoinValues(usd.value));
-
-const isBtcStale = computed(() => {
-  if (btc.value === null || expectedValues.value.btc === null) return true;
-  return btc.value !== expectedValues.value.btc;
 });
-
-const isEthStale = computed(() => {
-  if (eth.value === null || expectedValues.value.eth === null) return true;
-  return eth.value !== expectedValues.value.eth;
-});
-
-const handleSubmit = () => {
-  const coinValues = getCoinValues(usd.value);
-
-  btc.value = coinValues.btc;
-  eth.value = coinValues.eth;
-};
 </script>
 
 <template>
@@ -46,38 +25,28 @@ const handleSubmit = () => {
     <h1>Asset allocation calculator</h1>
     <div v-if="!conversationRates">Loading exchange rates...</div>
     <div v-else class="AssetAllocationCalculator--Row">
-      <form
-        class="AssetAllocationCalculator--Left"
-        @submit.prevent="handleSubmit"
-      >
+      <div class="AssetAllocationCalculator--Left">
         <div class="AssetAllocationCalculator--InputWrapper">
           <label for="usd">Investable assets</label>
           <input
             autofocus
             id="usd"
             v-model.number="usd"
-            type="text"
-            inputmode="decimal"
-            pattern="^\d+(\.\d{0,2})?$"
+            type="number"
+            step="0.01"
+            min="0"
             placeholder="0.00"
           />
         </div>
-        <button :disabled="usd == null || isNaN(usd) || usd <= 0" type="submit">
-          Calculate
-        </button>
-      </form>
+      </div>
       <div class="AssetAllocationCalculator--Right">
         <div>
-          <div>70% BTC allocation</div>
-          <div :class="['allocation-value', { stale: isBtcStale }]">
-            {{ btc?.toFixed(8) ?? "–" }}
-          </div>
+          <h3>70% BTC allocation</h3>
+          <div>{{ expectedValues.btc?.toFixed(8) ?? "–" }}</div>
         </div>
         <div>
-          <div>30% ETH allocation</div>
-          <div :class="['allocation-value', { stale: isEthStale }]">
-            {{ eth?.toFixed(8) ?? "–" }}
-          </div>
+          <h3>30% ETH allocation</h3>
+          <div>{{ expectedValues.eth?.toFixed(8) ?? "–" }}</div>
         </div>
       </div>
     </div>
@@ -85,11 +54,22 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
 .AssetAllocationCalculator {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  h1 {
+  gap: 2rem;
+  h1,
+  h3 {
     margin: auto;
   }
   .AssetAllocationCalculator--Row {
@@ -98,7 +78,7 @@ const handleSubmit = () => {
     > * {
       flex: 1 1 50%;
     }
-    form.AssetAllocationCalculator--Left {
+    .AssetAllocationCalculator--Left {
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -106,12 +86,13 @@ const handleSubmit = () => {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-      }
-      button[type="submit"] {
-        transition: background-color 75ms ease;
-        &:disabled {
-          background-color: grey;
-          cursor: pointer;
+        label {
+          font-size: 1.17rem;
+          font-weight: bold;
+        }
+        input {
+          padding: 0.25rem 0.5rem;
+          border-radius: 8px;
         }
       }
     }
@@ -122,12 +103,6 @@ const handleSubmit = () => {
       > * {
         flex: 1 1 50%;
       }
-    }
-  }
-  .allocation-value {
-    transition: color 75ms ease;
-    &.stale {
-      color: grey;
     }
   }
 }
