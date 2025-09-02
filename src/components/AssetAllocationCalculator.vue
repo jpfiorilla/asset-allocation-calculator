@@ -21,14 +21,14 @@ const expectedValues = computed(() => {
 </script>
 
 <template>
-  <div class="AssetAllocationCalculator">
+  <div class="calculator">
     <h1>Asset allocation calculator</h1>
     <div v-if="!conversationRates">Loading exchange rates...</div>
-    <div v-else class="AssetAllocationCalculator--Row">
-      <div class="AssetAllocationCalculator--Left">
-        <div class="AssetAllocationCalculator--LabelWrapper">
+    <div v-else class="calculator-row">
+      <div class="left">
+        <div class="calculator-input">
           <label for="usd">Investable assets</label>
-          <div class="AssetAllocationCalculator--InputWrapper">
+          <div class="input-wrapper">
             <div class="prefix">$</div>
             <input
               autofocus
@@ -42,7 +42,7 @@ const expectedValues = computed(() => {
           </div>
         </div>
       </div>
-      <div class="AssetAllocationCalculator--Right">
+      <div class="calculator-output">
         <div>
           <h3>70% BTC allocation</h3>
           <div>{{ expectedValues.btc?.toFixed(8) ?? "–" }}</div>
@@ -57,24 +57,24 @@ const expectedValues = computed(() => {
 </template>
 
 <style scoped>
-.AssetAllocationCalculator {
+.calculator {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   h3 {
     margin: 0;
   }
-  .AssetAllocationCalculator--Row {
+  .calculator-row {
     display: flex;
     gap: 2rem;
     > * {
       flex: 1 1 50%;
     }
-    .AssetAllocationCalculator--Left {
+    .left {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      .AssetAllocationCalculator--LabelWrapper {
+      .calculator-input {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
@@ -82,7 +82,7 @@ const expectedValues = computed(() => {
           font-size: 1.17rem;
           font-weight: bold;
         }
-        .AssetAllocationCalculator--InputWrapper {
+        .input-wrapper {
           display: flex;
           align-items: center;
           position: relative;
@@ -101,7 +101,7 @@ const expectedValues = computed(() => {
         }
       }
     }
-    .AssetAllocationCalculator--Right {
+    .calculator-output {
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -110,10 +110,10 @@ const expectedValues = computed(() => {
 }
 
 @media (max-width: 600px) {
-  .AssetAllocationCalculator {
-    .AssetAllocationCalculator--Row {
+  .calculator {
+    .calculator-row {
       flex-direction: column;
-      .AssetAllocationCalculator--Right {
+      .calculator-output {
         flex-direction: row;
         > * {
           flex: 1 1 50%;
