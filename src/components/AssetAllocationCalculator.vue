@@ -26,17 +26,20 @@ const expectedValues = computed(() => {
     <div v-if="!conversationRates">Loading exchange rates...</div>
     <div v-else class="AssetAllocationCalculator--Row">
       <div class="AssetAllocationCalculator--Left">
-        <div class="AssetAllocationCalculator--InputWrapper">
+        <div class="AssetAllocationCalculator--LabelWrapper">
           <label for="usd">Investable assets</label>
-          <input
-            autofocus
-            id="usd"
-            v-model.number="usd"
-            type="number"
-            step="0.01"
-            min="0"
-            placeholder="0.00"
-          />
+          <div class="AssetAllocationCalculator--InputWrapper">
+            <div class="prefix">$</div>
+            <input
+              autofocus
+              id="usd"
+              v-model.number="usd"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+            />
+          </div>
         </div>
       </div>
       <div class="AssetAllocationCalculator--Right">
@@ -71,7 +74,7 @@ const expectedValues = computed(() => {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      .AssetAllocationCalculator--InputWrapper {
+      .AssetAllocationCalculator--LabelWrapper {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
@@ -79,9 +82,22 @@ const expectedValues = computed(() => {
           font-size: 1.17rem;
           font-weight: bold;
         }
-        input {
-          padding: 0.25rem 0.5rem;
-          border-radius: 8px;
+        .AssetAllocationCalculator--InputWrapper {
+          display: flex;
+          align-items: center;
+          position: relative;
+          .prefix {
+            position: absolute;
+            left: 0.5rem;
+            color: grey;
+            pointer-events: none;
+            transform: translateY(-1px);
+          }
+          input {
+            padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+            border-radius: 8px;
+            flex: 1 0 auto;
+          }
         }
       }
     }
